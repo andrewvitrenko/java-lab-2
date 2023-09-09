@@ -2,17 +2,17 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        byte[][] A = Main.generateMatrix(3, 5);
-        byte[][] B = Main.generateMatrix(3, 5);
+        byte[][] A = generateMatrix(3, 5);
+        byte[][] B = generateMatrix(3, 5);
 
         System.out.printf("A - %s\n", Arrays.deepToString(A));
         System.out.printf("B - %s\n", Arrays.deepToString(B));
 
-        int[][] C = Main.sum(A, B);
+        int[][] C = sum(A, B);
 
         System.out.printf("C - %s\n", Arrays.deepToString(C));
 
-        int result = Main.analyze(C);
+        int result = analyze(C);
 
         System.out.printf("result - %d\n", result);
     }
@@ -30,7 +30,7 @@ public class Main {
     }
 
     public static int[][] sum(byte[][] matrixA, byte[][] matrixB) throws Exception {
-        Main.checkDimensions(matrixA, matrixB);
+        checkDimensions(matrixA, matrixB);
 
         int[][] result = new int[matrixA.length][matrixA[0].length];
 
@@ -57,7 +57,7 @@ public class Main {
 
         for (int i = 0; i < matrix[0].length; i++) {
 
-            int[] column = Main.getColumn(matrix, i);
+            int[] column = getColumn(matrix, i);
 
             if (i % 2 == 0) {
                 result += Arrays.stream(column).min().getAsInt();
