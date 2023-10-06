@@ -1,23 +1,40 @@
 import java.util.Arrays;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        byte[][] A = Main.generateMatrix(3, 5);
-        byte[][] B = Main.generateMatrix(3, 5);
+    private static Scanner scanner;
 
-        System.out.printf("A - %s\n", Arrays.deepToString(A));
-        System.out.printf("B - %s\n", Arrays.deepToString(B));
+    public static void main(String[] args) {
+        Main.scanner = new Scanner(System.in);
+        try {
+            int rowsA = Main.getParam("rows", "A");
+            int columnsA = Main.getParam("columns", "A");
+            int rowsB = Main.getParam("rows", "B");
+            int columnsB = Main.getParam("columns", "B");
 
-        int[][] C = Main.sum(A, B);
+            byte[][] A = Main.generateMatrix(rowsA, columnsA);
+            byte[][] B = Main.generateMatrix(rowsB, columnsB);
 
-        System.out.printf("C - %s\n", Arrays.deepToString(C));
+            System.out.printf("A - %s\n", Arrays.deepToString(A));
+            System.out.printf("B - %s\n", Arrays.deepToString(B));
 
-        int result = Main.analyze(C);
+            int[][] C = Main.sum(A, B);
 
-        System.out.printf("result - %d\n", result);
+            System.out.printf("C - %s\n", Arrays.deepToString(C));
+
+            int result = Main.analyze(C);
+
+            System.out.printf("result - %d\n", result);
+
+        } catch (LabException e) {
+            System.out.println("Lab exception: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
     }
 
-    public static byte[][] generateMatrix(int rows, int columns) {
+    private static byte[][] generateMatrix(int rows, int columns) {
         byte[][] matrix = new byte[rows][columns];
 
         for (int i = 0; i < matrix.length; i++) {
@@ -29,7 +46,7 @@ public class Main {
         return matrix;
     }
 
-    public static int[][] sum(byte[][] matrixA, byte[][] matrixB) throws Exception {
+    private static int[][] sum(byte[][] matrixA, byte[][] matrixB) throws LabException {
         Main.checkDimensions(matrixA, matrixB);
 
         int[][] result = new int[matrixA.length][matrixA[0].length];
@@ -43,16 +60,16 @@ public class Main {
         return result;
     }
 
-    public static void checkDimensions(byte[][] A, byte[][] B) throws Exception {
+    private static void checkDimensions(byte[][] A, byte[][] B) throws LabException {
         boolean isEqualRows = A.length == B.length;
         boolean isEqualColumns = A[0].length == B[0].length;
 
         if (!isEqualColumns || !isEqualRows) {
-            throw new Exception("Matrices with different dimensions");
+            throw new LabException("Matrices with different dimensions");
         }
     }
 
-    public static int analyze(int[][] matrix) {
+    private static int analyze(int[][] matrix) {
         int result = 0;
 
         for (int i = 0; i < matrix[0].length; i++) {
@@ -70,7 +87,7 @@ public class Main {
         return result;
     }
 
-    public static int[] getColumn(int[][] matrix, int columnIndex) {
+    private static int[] getColumn(int[][] matrix, int columnIndex) {
         int[] column = new int[matrix.length];
 
         for (int i = 0; i < matrix.length; i++) {
@@ -78,5 +95,29 @@ public class Main {
         }
 
         return column;
+    }
+
+    private static int getParam(String param, String matrix) {
+        int value = 0;
+
+        do {
+            try {
+                System.out.printf("Enter value for %s in matrix %s: ", param, matrix);
+                int input = scanner.nextInt();
+                if (input <= 0) {
+                    throw new LabException("Value should be greater than zero");
+                }
+
+                value = input;
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid value");
+                scanner.nextLine();
+            } catch (LabException e) {
+                System.out.println("Lab exception: " + e.getMessage());
+                scanner.nextLine();
+            }
+        } while (value <= 0);
+
+        return value;
     }
 }
