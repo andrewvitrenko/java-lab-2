@@ -34,17 +34,7 @@ public class Main {
         }
     }
 
-    private static byte[][] generateMatrix(int rows, int columns) {
-        byte[][] matrix = new byte[rows][columns];
-
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                matrix[i][j] = (byte) (Math.random() * 10);
-            }
-        }
-
-        return matrix;
-    }
+    /* ---------------- Main methods ------------------ */
 
     private static int[][] sum(byte[][] matrixA, byte[][] matrixB) throws LabException {
         Main.checkDimensions(matrixA, matrixB);
@@ -58,15 +48,6 @@ public class Main {
         }
 
         return result;
-    }
-
-    private static void checkDimensions(byte[][] A, byte[][] B) throws LabException {
-        boolean isEqualRows = A.length == B.length;
-        boolean isEqualColumns = A[0].length == B[0].length;
-
-        if (!isEqualColumns || !isEqualRows) {
-            throw new LabException("Matrices with different dimensions");
-        }
     }
 
     private static int analyze(int[][] matrix) {
@@ -85,6 +66,31 @@ public class Main {
         }
 
         return result;
+    }
+
+    /* ---------------- Guards ------------------ */
+
+    private static void checkDimensions(byte[][] A, byte[][] B) throws LabException {
+        boolean isEqualRows = A.length == B.length;
+        boolean isEqualColumns = A[0].length == B[0].length;
+
+        if (!isEqualColumns || !isEqualRows) {
+            throw new LabException("Matrices with different dimensions");
+        }
+    }
+
+    /* ---------------- Utility methods ------------------ */
+
+    private static byte[][] generateMatrix(int rows, int columns) {
+        byte[][] matrix = new byte[rows][columns];
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = (byte) (Math.random() * 10);
+            }
+        }
+
+        return matrix;
     }
 
     private static int[] getColumn(int[][] matrix, int columnIndex) {
